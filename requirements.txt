@@ -1,6 +1,6 @@
 streamlit
 pandas
-rapidfuzz
+rapidfuzz>=3.0.0
 python-docx
 python-pptx
 PyMuPDF
