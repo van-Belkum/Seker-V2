@@ -1,0 +1,9 @@
+streamlit
+pandas
+numpy
+pyyaml
+PyMuPDF
+python-docx
+python-pptx
+pyspellchecker
+xlsxwriter

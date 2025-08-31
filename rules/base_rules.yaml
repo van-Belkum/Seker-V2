@@ -1,0 +1,9 @@
+policies:
+  - name: Power Resilience — Eltek PSU note
+    trigger:
+      project:
+        - Power Resilience
+    search_any:
+      - ELTEK PSU
+      - IMPORTANT NOTE
+    guidance_hint: See TDEE43001 section 3.8.1
