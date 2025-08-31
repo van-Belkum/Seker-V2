@@ -1,0 +1,12 @@
+streamlit
+pandas
+numpy
+rapidfuzz
+pyyaml
+openpyxl
+xlsxwriter
+PyMuPDF
+pdf2image
+pytesseract
+python-docx
+python-pptx
