@@ -1,8 +1,21 @@
-# utils/guidance_loader.py
-from __future__ import annotations
-import os, io, re, json
-from dataclasses import dataclass
-from typing import Dict, List, Iterable, Tuple, Optional
+# app.py (near the top)
+try:
+    from utils.guidance_loader import (
+        build_index_from_folder,
+        build_index_from_zip,
+        search_terms,
+        GuidanceIndex,
+    )
+except Exception as e:
+    # Fallback: import the module and reference via module to avoid name errors
+    import importlib, traceback, sys
+    gl = importlib.import_module("utils.guidance_loader")
+    build_index_from_folder = getattr(gl, "build_index_from_folder")
+    build_index_from_zip     = getattr(gl, "build_index_from_zip", lambda _b: gl.GuidanceIndex(root="(zip)", docs=[]))
+    search_terms             = getattr(gl, "search_terms")
+    GuidanceIndex            = getattr(gl, "GuidanceIndex")
+    print("Guidance import fallback used:", e, file=sys.stderr)
+    traceback.print_exc()
 
 # ---- Robust fuzzy helpers ----------------------------------------------------
 try:
