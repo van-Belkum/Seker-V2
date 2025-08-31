@@ -1,0 +1,10 @@
+streamlit
+pandas
+numpy
+pyyaml
+python-docx
+python-pptx
+PyMuPDF
+pdf2image
+pytesseract
+pyspellchecker
