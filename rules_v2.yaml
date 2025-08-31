@@ -1,0 +1,28 @@
+# Seker V2 default rules
+rules:
+  - name: Title block present
+    severity: major
+    type: keyword
+    must_contain: ["TITLE","SCALE"]
+    scope: {}
+
+  - name: Filename matches site address
+    severity: major
+    type: keyword
+    scope: {}
+    # Implemented in code (filename vs site address). Kept here for visibility.
+
+  - name: Power Resilience – Eltek PSU note present
+    severity: major
+    type: rag
+    trigger: "(Power\\s*Resilience|PR\\b)"
+    require: "Eltek PSU.*TDEE53201.*3\\.8\\.1"
+    scope:
+      project: ["Power Resilience"]
+      client: ["BTEE"]
+
+  - name: Forbidden placeholders
+    severity: minor
+    type: keyword
+    forbid: ["LOREM IPSUM","PLACEHOLDER","TBC\\b"]
+    scope: {}
