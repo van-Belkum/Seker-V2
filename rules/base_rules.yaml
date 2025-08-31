@@ -1,16 +1,28 @@
-
+# Base rules loaded on start. You can add more here (or append via Training tab).
 checklist:
   - name: Title block present
     severity: major
     must_contain: ["TITLE"]
     reject_if_present: []
-  - name: Scale shown
+
+  - name: Scale must be shown
     severity: minor
     must_contain: ["SCALE"]
     reject_if_present: []
-policies:
-  - name: Power Resilience — Eltek PSU note
-    trigger:
+
+  - name: Project-level PR note (ELTEK/Polarium)
+    scope:
       project: ["Power Resilience"]
-    search_any: ["ELTEK PSU","IMPORTANT NOTE"]
-    guidance_hint: "See TDEE43001 section 3.8.1"
+    severity: major
+    must_contain: ["IMPORTANT NOTE", "ELTEK PSU", "TDEE53201", "3.8.1"]
+    reject_if_present: []
+
+  - name: Address must match drawing title
+    severity: major
+    meta_key: "site_address"
+    rule: "address_in_title"
+    reject_if_present: []
+
+spelling:
+  enabled_default: true
+  allow_words: ["AYGE","AYGD","AYGG","ELTEK","Polarium","Commscope","SAMI","BoB","GPS","AYGE","AYGD"]
