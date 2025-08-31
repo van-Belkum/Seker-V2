@@ -1,0 +1,12 @@
+
+streamlit
+pandas
+numpy
+PyMuPDF
+pyyaml
+openpyxl
+xlsxwriter
+python-docx
+python-pptx
+scikit-learn
+sentence-transformers
