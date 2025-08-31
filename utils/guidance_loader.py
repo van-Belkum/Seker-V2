@@ -1,86 +1,70 @@
-
-import os, re, glob, io
-from typing import List, Dict, Any
+# utils/guidance.py
+import os, io, zipfile, json, re
+from typing import Dict, List
 import fitz  # PyMuPDF
-try:
-    import docx  # python-docx
-except Exception:
-    docx = None
-try:
-    from pptx import Presentation
-except Exception:
-    Presentation = None
 
-import pandas as pd
+SUPPORTED_DOCS = {".pdf", ".txt"}
 
-def guidance_default_root():
-    # Windows default provided by user
-    return r"C:\Mac\Home\Music\Guidance"
+def _text_from_pdf_bytes(data: bytes) -> str:
+    doc = fitz.open(stream=data, filetype="pdf")
+    parts = []
+    for p in doc:
+        parts.append(p.get_text("text"))
+    return "\n".join(parts)
 
-def read_file_text(path: str) -> str:
-    ext = os.path.splitext(path.lower())[1]
-    if ext==".pdf":
-        try:
-            with fitz.open(stream=open(path,"rb").read(), filetype="pdf") as doc:
-                return "\n".join(page.get_text("text") for page in doc)
-        except Exception:
-            return ""
-    if ext in (".docx",):
-        if not docx: return ""
-        try:
-            d = docx.Document(path)
-            return "\n".join([p.text for p in d.paragraphs])
-        except Exception:
-            return ""
-    if ext in (".pptx",):
-        if not Presentation: return ""
-        try:
-            prs = Presentation(path)
-            parts=[]
-            for s in prs.slides:
-                for shp in s.shapes:
-                    if hasattr(shp, "text"):
-                        parts.append(shp.text)
-            return "\n".join(parts)
-        except Exception:
-            return ""
-    if ext in (".txt",".md"):
-        try:
-            return open(path,"r",encoding="utf-8",errors="ignore").read()
-        except Exception:
-            return ""
+def _text_from_file(path: str) -> str:
+    ext = os.path.splitext(path)[1].lower()
+    if ext == ".pdf":
+        return _text_from_pdf_bytes(open(path, "rb").read())
+    if ext == ".txt":
+        return open(path, "r", encoding="utf-8", errors="ignore").read()
     return ""
 
-def load_guidance_corpus() -> List[Dict[str,Any]]:
-    root = os.environ.get("GUIDANCE_ROOT", guidance_default_root())
-    corpus=[]
-    if not os.path.isdir(root):
-        return corpus
-    # BTEE and other orgs
-    for dirpath, dirnames, filenames in os.walk(root):
-        for fn in filenames:
-            if os.path.splitext(fn)[1].lower() in (".pdf",".docx",".pptx",".txt",".md"):
-                full = os.path.join(dirpath, fn)
-                text = read_file_text(full)
-                if text:
-                    corpus.append({"id": full, "source": os.path.relpath(full, root), "text": text})
-    return corpus
+def build_index_from_folder(root: str) -> Dict:
+    index = {"docs": []}
+    if not root or not os.path.isdir(root):
+        return index
+    for dirpath, _, files in os.walk(root):
+        for f in files:
+            ext = os.path.splitext(f)[1].lower()
+            if ext in SUPPORTED_DOCS:
+                fp = os.path.join(dirpath, f)
+                try:
+                    txt = _text_from_file(fp)
+                    index["docs"].append({"path": fp, "text": txt})
+                except Exception:
+                    pass
+    index["count"] = len(index["docs"])
+    return index
 
-def load_latest_nemesis() -> pd.DataFrame:
-    root = os.environ.get("GUIDANCE_ROOT", guidance_default_root())
-    nroot = os.path.join(root, "Nemesis")
-    if not os.path.isdir(nroot):
-        return pd.DataFrame()
-    # pick latest by modified time matching KTL_Site_Nemesis_Data_*.xls*
-    files = glob.glob(os.path.join(nroot, "KTL_Site_Nemesis_Data_*.xls*"))
-    if not files:
-        return pd.DataFrame()
-    files.sort(key=lambda p: os.path.getmtime(p), reverse=True)
-    latest = files[0]
+def build_index_from_zip(zip_bytes: bytes) -> Dict:
+    index = {"docs": []}
     try:
-        return pd.read_excel(latest)
+        with zipfile.ZipFile(io.BytesIO(zip_bytes), "r") as z:
+            for name in z.namelist():
+                ext = os.path.splitext(name)[1].lower()
+                if ext in SUPPORTED_DOCS:
+                    try:
+                        data = z.read(name)
+                        txt = _text_from_pdf_bytes(data) if ext == ".pdf" else data.decode("utf-8","ignore")
+                        index["docs"].append({"path": name, "text": txt})
+                    except Exception:
+                        pass
+        index["count"] = len(index["docs"])
     except Exception:
-        try:
-            return pd.read_excel(latest, engine="openpyxl")
-        except Exception:
-            return pd.DataFrame()
+        index["count"] = 0
+    return index
+
+def search_terms(index: Dict, terms: List[str]) -> List[Dict]:
+    """Return matches [{'doc':path,'snippet':...}] if all terms are found in a document."""
+    out = []
+    if not index or not index.get("docs"):
+        return out
+    for d in index["docs"]:
+        text = d["text"]
+        if all(t.lower() in text.lower() for t in terms):
+            # cheap snippet
+            i = text.lower().find(terms[0].lower())
+            snippet = text[max(0,i-60): i+120] if i >= 0 else text[:180]
+            out.append({"doc": d["path"], "snippet": snippet})
+    return out
