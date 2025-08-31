@@ -1,0 +1,16 @@
+streamlit
+pandas
+numpy
+pyyaml
+rapidfuzz
+PyMuPDF
+pypdf
+python-docx
+python-pptx
+pdf2image
+pytesseract
+pyspellchecker
+sentence-transformers
+faiss-cpu
+openpyxl
+xlsxwriter
