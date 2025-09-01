@@ -4,7 +4,6 @@ meta:
   updated: "2025-09-01"
 
 rules:
-  # Document baseline
   - id: "DOC_TITLE_PRESENT"
     type: "doc_text_presence"
     description: "Title page contains clear title or design guide marker."
@@ -36,7 +35,6 @@ rules:
     options:
       any: ["Reference","References","Appendix","Appendices"]
 
-  # Design PDF baseline
   - id: "PDF_NORTH_ARROW_MARKER"
     type: "pdf_text_presence"
     description: "Design PDF mentions NORTH / NORTH ARROW."
