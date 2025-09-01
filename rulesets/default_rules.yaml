@@ -1,0 +1,38 @@
+meta:
+  name: "AI Design Auditor V3 Ruleset"
+  version: "3.0.0"
+  updated: "2025-09-02"
+rules:
+  - id: "DOC_TITLE_PRESENT"
+    type: "doc_text_presence"
+    description: "Title page contains clear title or design guide marker."
+    severity: "major"
+    options:
+      any: ["Title","Detailed Design","Design Guide"]
+  - id: "DOC_VERSION_CONTROL"
+    type: "doc_text_presence"
+    description: "Version number and release date present."
+    severity: "major"
+    options:
+      any_regex:
+        - '\bVersion\b\s*[:\-]?'
+        - '\bV\s?\d+(?:\.\d+)*\b'
+        - '\bDate Issued\b'
+  - id: "DOC_TOC_PRESENT"
+    type: "doc_text_presence"
+    description: "Table of Contents present."
+    severity: "minor"
+    options:
+      any: ["Table of Contents","Contents"]
+  - id: "DOC_REFERENCES"
+    type: "doc_text_presence"
+    description: "References/Appendices listed."
+    severity: "minor"
+    options:
+      any: ["Reference","References","Appendix","Appendices"]
+  - id: "PDF_NORTH_ARROW_MARKER"
+    type: "pdf_text_presence"
+    description: "Design PDF mentions NORTH / NORTH ARROW."
+    severity: "minor"
+    options:
+      any: ["NORTH","NORTH ARROW"]
