@@ -1,0 +1,7 @@
+admin:
+  passphrase: "Admit"
+privacy:
+  hide_guidance_for_non_admin: true
+guidance:
+  root_path: "guidance"
+  index_file: "guidance_index.csv"
