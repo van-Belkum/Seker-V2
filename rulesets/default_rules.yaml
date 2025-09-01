@@ -1,0 +1,41 @@
+# Default Seker V2 ruleset
+meta:
+  name: "Default Seker Ruleset"
+  version: "2.0.0"
+  updated: "2025-09-01"
+  notes: |
+    Baseline ruleset. Extend freely in Training or YAML.
+settings:
+  hide_mimo_if_project_equals: "Power Resilience"
+  radio_locations:
+    - Low Level
+    - Midway
+    - High Level
+    - Unique Coverage
+  mimo_sectors: ["S1", "S2", "S3", "S4"]
+rules:
+  - id: "ADDR_TITLE_MATCH"
+    type: "string_match"
+    severity: "major"
+    description: "Site address must appear in drawing title (ignoring ', 0 ,')."
+    inputs: ["site_address", "drawing_title"]
+    options:
+      ignore_tokens: [", 0 ,"]
+      case_insensitive: true
+
+  - id: "MIMO_PRESENT"
+    type: "mimo_required"
+    severity: "minor"
+    description: "MIMO per-sector selection required unless project is Power Resilience."
+    options:
+      except_project_equals: "Power Resilience"
+
+  - id: "SPELLING_BASICS"
+    type: "spelling"
+    severity: "minor"
+    description: "Basic spelling pass on metadata and checklist descriptions."
+
+  - id: "CHECKLIST_EXPECTED_STATUS"
+    type: "checklist_expected"
+    severity: "major"
+    description: "Checklist items must match expected status."
