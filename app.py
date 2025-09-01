@@ -1,10 +1,10 @@
 
-    import io
-    from pathlib import Path
-    import json
-    import pandas as pd
-    import streamlit as st
-    import matplotlib.pyplot as plt
+  import io
+from pathlib import Path
+import json
+import pandas as pd
+import streamlit as st
+import matplotlib.pyplot as plt
     from modules import audit as audit_mod
     from modules import rules as rules_mod
     from modules import training as training_mod
