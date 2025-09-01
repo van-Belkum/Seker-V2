@@ -5,12 +5,13 @@ import json
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
-    from modules import audit as audit_mod
-    from modules import rules as rules_mod
-    from modules import training as training_mod
-    from modules import analytics as analytics_mod
-    from modules import pdf_tools
-    from modules.utils import save_history_row
+
+from modules import audit as audit_mod
+from modules import rules as rules_mod
+from modules import training as training_mod
+from modules import analytics as analytics_mod
+from modules import pdf_tools
+from modules.utils import save_history_row
 
     st.set_page_config(page_title="Seker V2 — AI Design Quality Auditor", layout="wide", page_icon="🛰️")
     with st.sidebar:
