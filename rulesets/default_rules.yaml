@@ -2,92 +2,134 @@ meta:
   name: "Seker V2.3 Ruleset"
   version: "2.3.0"
   updated: "2025-09-01"
+
 rules:
+  # I. Document & Formatting
   - id: "TITLE_PRESENT"
     type: "doc_text_presence"
     description: "Title page contains clear title."
     severity: "major"
-    options: {any: ["Title", "Detailed Design", "Design Guide"]}
+    options:
+      any: ["Title", "Detailed Design", "Design Guide"]
+
   - id: "VERSION_CONTROL"
     type: "doc_text_presence"
     description: "Version number and release date present (e.g., 'Version' or 'V 1.0')."
     severity: "major"
-    options: {any_regex: ["\bVersion\b\s*[:\-]?", "\bV\s?\d+(?:\.\d+)*\b", "\bDate Issued\b"]}
+    options:
+      any_regex:
+        - '\bVersion\b\s*[:\-]?'
+        - '\bV\s?\d+(?:\.\d+)*\b'
+        - '\bDate Issued\b'
+
   - id: "TOC_PAGES"
     type: "doc_text_presence"
     description: "Table of Contents and page numbering."
     severity: "minor"
-    options: {any: ["Table of Contents", "Contents"]}
+    options:
+      any: ["Table of Contents", "Contents"]
+
   - id: "REFERENCES_APPENDICES"
     type: "doc_text_presence"
     description: "References/Appendices listed."
     severity: "minor"
-    options: {any: ["Reference", "References", "Appendix", "Appendices"]}
+    options:
+      any: ["Reference", "References", "Appendix", "Appendices"]
+
+  # II. Content & Clarity
   - id: "INTRO_SCOPE"
     type: "doc_text_presence"
     description: "Introduction and Scope sections present."
     severity: "minor"
-    options: {all: ["Introduction", "Scope"]}
+    options:
+      all: ["Introduction", "Scope"]
+
   - id: "REQS_FUNCTIONAL_PERFORMANCE"
     type: "doc_text_presence"
     description: "Functional/performance requirements defined."
     severity: "major"
-    options: {any: ["Requirements", "Design Requirements"]}
+    options:
+      any: ["Requirements", "Design Requirements"]
+
   - id: "USER_CENTRICITY"
     type: "doc_text_presence"
     description: "User needs/journeys/usability addressed."
     severity: "minor"
-    options: {any: ["User", "Usability", "Access", "Maintenance", "Operation"]}
+    options:
+      any: ["User", "Usability", "Access", "Maintenance", "Operation"]
+
   - id: "REGULATORY_STATUTORY"
     type: "doc_text_presence"
     description: "Regulatory/statutory requirements included."
     severity: "major"
-    options: {any: ["Regulatory", "Statutory", "ICNIRP", "Building Regulations"]}
+    options:
+      any: ["Regulatory", "Statutory", "ICNIRP", "Building Regulations"]
+
   - id: "DESIGN_SPEC_UNAMBIGUOUS"
     type: "doc_text_presence"
     description: "Design specification details provided."
     severity: "major"
-    options: {any: ["Design Requirements", "Specification", "Design Guidance"]}
+    options:
+      any: ["Design Requirements", "Specification", "Design Guidance"]
+
   - id: "TESTING_VALIDATION"
     type: "doc_text_presence"
     description: "Testing/verification/validation plans linked to acceptance criteria."
     severity: "minor"
-    options: {any: ["Testing", "Validation", "Verification", "Acceptance Criteria"]}
+    options:
+      any: ["Testing", "Validation", "Verification", "Acceptance Criteria"]
+
+  # III. Accuracy & Validation
   - id: "DATE_RECENT"
     type: "doc_date_recency"
     description: "Document date present and not older than 2 years (warning if older)."
     severity: "minor"
+
   - id: "LINKS_VALID"
     type: "doc_link_presence"
     description: "Links present and appear valid."
     severity: "minor"
+
+  # IV. Compliance & Standards
   - id: "INTERNAL_PROCEDURES"
     type: "doc_text_presence"
     description: "Internal procedures cited."
     severity: "minor"
-    options: {any: ["TD40001", "TD30001", "TD54000", "RAN54000", "HS001", "S3002"]}
+    options:
+      any: ["TD40001", "TD30001", "TD54000", "RAN54000", "HS001", "S3002"]
+
   - id: "REGULATORY_COMPLIANCE"
     type: "doc_text_presence"
     description: "Regulatory/contractual compliance statements present."
     severity: "major"
-    options: {any: ["Compliance", "Standards", "Contract", "Safety"]}
+    options:
+      any: ["Compliance", "Standards", "Contract", "Safety"]
+
   - id: "CHANGE_CONTROL"
     type: "doc_text_presence"
     description: "Change control or change register present."
     severity: "minor"
-    options: {any: ["Change History", "Change Register", "Revision", "Amendment History"]}
+    options:
+      any: ["Change History", "Change Register", "Revision", "Amendment History"]
+
+  # V. Completeness & Review
   - id: "INPUT_OUTPUT_TRACE"
     type: "doc_text_presence"
     description: "Inputs vs outputs trace or mapping to requirements."
     severity: "minor"
-    options: {any: ["Inputs", "Outputs", "Acceptance", "Traceability"]}
+    options:
+      any: ["Inputs", "Outputs", "Acceptance", "Traceability"]
+
   - id: "PROBLEM_RESOLUTION"
     type: "doc_text_presence"
     description: "Problem/ambiguity resolution documented."
     severity: "minor"
-    options: {any: ["Issue", "Problem", "Ambiguity", "Resolution"]}
+    options:
+      any: ["Issue", "Problem", "Ambiguity", "Resolution"]
+
   - id: "REVIEW_DOCS"
     type: "doc_text_presence"
     description: "Review/approval documentation included."
     severity: "minor"
-    options: {any: ["Approvals", "Document Distribution and Approval", "RACI", "Sign off"]}
+    options:
+      any: ["Approvals", "Document Distribution and Approval", "RACI", "Sign off"]
